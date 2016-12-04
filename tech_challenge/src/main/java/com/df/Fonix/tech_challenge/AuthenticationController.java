@@ -6,6 +6,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class AuthenticationController {
@@ -24,7 +25,7 @@ public class AuthenticationController {
 	}
 	
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-	public String authenticate(ModelMap model, @RequestBody MultiValueMap<String,String> formData) {
+	public ModelAndView authenticate(ModelMap model, @RequestBody MultiValueMap<String,String> formData) {
 		
 		MobileNumberFormatter numberFormatter = new MobileNumberFormatter();
 		SMSSender smsSender = new SMSSender();
@@ -37,11 +38,13 @@ public class AuthenticationController {
 		StringBuilder message = new StringBuilder(MESSAGE_BASE);
 		message.append(code);
 		
-		smsSender.sendSMSMessage(mobileNumber, message.toString());
+		//smsSender.sendSMSMessage(mobileNumber, message.toString());
 		
-		model.addAttribute("auth_code", code);
+		ModelAndView mav = new ModelAndView(AUTHENTICATION_VIEW);
+		mav.addAllObjects(model);
+		mav.addObject("auth_code", code);
 		
-		return AUTHENTICATION_VIEW;
+		return mav;
 	}
 	
 }
