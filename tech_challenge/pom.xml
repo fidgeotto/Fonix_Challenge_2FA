@@ -32,6 +32,12 @@
 	    <artifactId>spring-webmvc</artifactId>
 	    <version>4.3.3.RELEASE</version>
 	</dependency>
+    <!-- https://mvnrepository.com/artifact/io.zensend/zensend -->
+	<dependency>
+	    <groupId>io.zensend</groupId>
+	    <artifactId>zensend</artifactId>
+	    <version>0.0.3</version>
+	</dependency>
     
   </dependencies>
   <build>

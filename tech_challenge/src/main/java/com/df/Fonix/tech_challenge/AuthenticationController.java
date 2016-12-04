@@ -12,6 +12,7 @@ public class AuthenticationController {
 
 	private static final String WELCOME_VIEW = "index";
 	private static final String AUTHENTICATION_VIEW = "authenticate";
+	private static final String MESSAGE_BASE = "Your unique PIN is: ";
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String welcome(ModelMap model) {
@@ -25,9 +26,20 @@ public class AuthenticationController {
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
 	public String authenticate(ModelMap model, @RequestBody MultiValueMap<String,String> formData) {
 		
-		String mobileNumber = formData.getFirst("mobile_number");
+		MobileNumberFormatter numberFormatter = new MobileNumberFormatter();
+		SMSSender smsSender = new SMSSender();
+		CodeGenerator codeGenerator = new CodeGenerator();
 		
-		System.out.println(mobileNumber);
+		String mobileNumber = numberFormatter.transformUKNumber(formData.getFirst("mobile_number"));
+		
+		String code = codeGenerator.getRandomCode();
+		
+		StringBuilder message = new StringBuilder(MESSAGE_BASE);
+		message.append(code);
+		
+		smsSender.sendSMSMessage(mobileNumber, message.toString());
+		
+		model.addAttribute("auth_code", code);
 		
 		return AUTHENTICATION_VIEW;
 	}
