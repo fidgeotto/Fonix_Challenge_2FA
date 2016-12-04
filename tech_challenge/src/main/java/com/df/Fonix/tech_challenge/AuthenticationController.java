@@ -38,7 +38,7 @@ public class AuthenticationController {
 		StringBuilder message = new StringBuilder(MESSAGE_BASE);
 		message.append(code);
 		
-		//smsSender.sendSMSMessage(mobileNumber, message.toString());
+		smsSender.sendSMSMessage(mobileNumber, message.toString());
 		
 		ModelAndView mav = new ModelAndView(AUTHENTICATION_VIEW);
 		mav.addAllObjects(model);
